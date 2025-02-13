@@ -4,7 +4,7 @@
 
 [project]
 name = "lennart_epp"
-description = "Template for reproducible research projects in economics"
+description = "Evaluate the performance of stocks using basic time series analysis methods."
 requires-python = ">=3.11"
 dynamic = ["version"]
 keywords = [
@@ -21,10 +21,10 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 authors = [
-    { name = "JANE DOE", email = "janedoe@example-university.com" },
+    { name = "Lennart Lülsdorf", email = "janedoe@example-university.com" },
 ]
 maintainers = [
-    { name = "JANE DOE", email = "janedoe@example-university.com" },
+    { name = "Lennart Lülsdorf", email = "janedoe@example-university.com" },
 ]
 
 [project.readme]
@@ -35,10 +35,10 @@ content-type = "text/markdown"
 text = "MIT"
 
 [project.urls]
-Changelog = "https://github.com/OpenSourceEconomics/econ-project-templates"
-Documentation = "https://github.com/OpenSourceEconomics/econ-project-templates"
-Github = "https://github.com/OpenSourceEconomics/econ-project-templates"
-Tracker = "https://github.com/OpenSourceEconomics/econ-project-templates/issues"
+Changelog = "https://github.com/iame-uni-bonn/final-project-Lenr4.git"
+Documentation = "https://github.com/iame-uni-bonn/final-project-Lenr4.git"
+Github = "https://github.com/iame-uni-bonn/final-project-Lenr4.git"
+Tracker = "https://github.com/iame-uni-bonn/final-project-Lenr4.git/issues"
 
 # ======================================================================================
 # Build system configuration

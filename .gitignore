@@ -34,8 +34,7 @@ bld/
 *.toc
 
 # documentation
-docs_template/build/
-docs_template/scripts/latex/*.png
+
 
 # local
 .vscode
