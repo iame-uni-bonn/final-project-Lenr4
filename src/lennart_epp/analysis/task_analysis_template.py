@@ -54,25 +54,3 @@ for group in TEMPLATE_GROUPS:
         data = pd.read_pickle(data_path)
         predicted_prob = predict_prob_by_age(data, model, group)
         predicted_prob.to_pickle(produces)
-
-
-@pytask.mark.r(script=SRC / "analysis" / "model_template.r", serializer="yaml")
-def task_fit_model_r(
-    formula=formula,
-    data=BLD / "data" / "stats4schools_smoking.rds",
-    produces=BLD / "estimation_results" / "baseline.rds",
-):
-    """Fit a logistic regression model (R version)."""
-
-
-for group in TEMPLATE_GROUPS:
-
-    @pytask.task(id=group)
-    @pytask.mark.r(script=SRC / "analysis" / "predict_template.r", serializer="yaml")
-    def task_predict_r(
-        group=group,
-        data_path=BLD / "data" / "stats4schools_smoking.rds",
-        model_path=BLD / "estimation_results" / "baseline.rds",
-        produces=BLD / "predictions" / f"{group}.rds",
-    ):
-        """Predict based on the model estimates (R version)."""
