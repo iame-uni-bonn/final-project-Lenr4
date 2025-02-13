@@ -24,6 +24,7 @@ dependencies:
   - numpy
   - pandas >=2.2
   - plotly >=5.2.0,<6
+  - yfinance  # added yfinance
 
   # R template project dependencies
   - pytask-r >=0.4.1
