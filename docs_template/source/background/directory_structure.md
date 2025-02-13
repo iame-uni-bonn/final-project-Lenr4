@@ -1,7 +1,7 @@
 ### The big picture
 
-The following graph shows the contents of template_project root directory after
-executing `pytask`, when you only select the Python example:
+The following graph shows the contents of lennart_epp root directory after executing
+`pytask`, when you only select the Python example:
 
 ```{figure} ../figures/generated/root_bld_src.png
 ---

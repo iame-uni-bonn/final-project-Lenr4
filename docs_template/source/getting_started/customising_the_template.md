@@ -3,9 +3,9 @@ meet your specific needs.
 
 ### First step: Rename the project
 
-Open the entire directory in VS Code. Search for `template_project` in the entire
-codebase and replace it with `new_project_name`, i.e., a concise version of your
-project's name (often called a "slug"). Rename the folder `src/template_project` to
+Open the entire directory in VS Code. Search for `lennart_epp` in the entire codebase
+and replace it with `new_project_name`, i.e., a concise version of your project's name
+(often called a "slug"). Rename the folder `src/lennart_epp` to
 `src/<new_project_name>`!
 
 ```{warning}
@@ -24,7 +24,7 @@ attributed to changes you make rather than the original template.
    dependencies:
 
    ```console
-   $ cd /to/root/of/template_project
+   $ cd /to/root/of/lennart_epp
    $ mamba env create
    ```
 

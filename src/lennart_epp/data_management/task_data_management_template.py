@@ -3,8 +3,8 @@
 import pandas as pd
 import pytask
 
-from template_project.config import BLD, SRC
-from template_project.data_management.stats4schools_smoking_template import (
+from lennart_epp.config import BLD, SRC
+from lennart_epp.data_management.stats4schools_smoking_template import (
     clean_stats4schools_smoking,
 )
 
