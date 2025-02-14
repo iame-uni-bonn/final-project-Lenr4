@@ -20,8 +20,8 @@ dependencies:
   - pytest-xdist
 
   # Python template project dependencies
-  - statsmodels
-  - numpy
+  - statsmodels >=0.14  # For ADF test in AR(p) model
+  - numpy >=1.26
   - pandas >=2.2
   - plotly >=5.2.0,<6
   - yfinance  # added yfinance
@@ -35,4 +35,4 @@ dependencies:
   - r-forcats
 
   # Install project
-  - pip: [-e ., pdbp, kaleido]
+  - pip: [-e ., pdbp, kaleido, arch >=5.1]
