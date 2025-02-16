@@ -1,4 +1,4 @@
-"""Tasks for fitting the AR(p) model on Apple stock data."""
+"""Task for fitting AR(p) model and saving results."""
 
 import pandas as pd
 
@@ -10,18 +10,13 @@ def task_fit_ar_model(
     script=SRC / "analysis" / "fit_ar_model.py",
     data=BLD / "data" / "cleaned_apple_data.pkl",
     produces=BLD / "models" / "ar_model_output.pkl",
-    p=5,
+    p=15,
 ):
-    # Load the cleaned stock data
+    """Fit AR(p) model and save coefficients, integrated coefficients, and metadata."""
     df = pd.read_pickle(data)
 
-    # Fit the AR(p) model
     model_results = fit_ar_model(df, column="close_price", p=p)
 
-    # Prepare and save model results
-    produces.parent.mkdir(parents=True, exist_ok=True)
-
-    # Create DataFrame for coefficients only
     coeff_df = pd.DataFrame(
         {
             "coefficient": model_results["coefficients"],
@@ -32,7 +27,8 @@ def task_fit_ar_model(
         }
     )
 
-    # Create a metadata DataFrame with p-value and differencing info
+    integrated_coeff_df = model_results["integrated_coefficients"]
+
     metadata_df = pd.DataFrame(
         {
             "p_value": [model_results["p_value"]],
@@ -41,9 +37,13 @@ def task_fit_ar_model(
         }
     )
 
-    # Combine into a single dictionary and save
-    result = {"coefficients": coeff_df, "metadata": metadata_df}
+    results = {
+        "coefficients": coeff_df,
+        "integrated_coefficients": integrated_coeff_df,
+        "metadata": metadata_df,
+    }
 
-    pd.to_pickle(result, produces)
+    produces.parent.mkdir(parents=True, exist_ok=True)
+    pd.to_pickle(results, produces)
 
-    assert produces.exists(), f"Failed to produce {produces}"
+    assert produces.exists(), f"❌ Failed to produce {produces}"
