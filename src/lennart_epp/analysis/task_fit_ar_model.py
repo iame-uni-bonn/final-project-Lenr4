@@ -1,45 +1,32 @@
-"""Task for fitting AR(p) model and saving results."""
-
 import pandas as pd
 
-from lennart_epp.analysis.fit_ar_model import fit_ar_model
+from lennart_epp.analysis.evaluate_ar_model import evaluate_ar_models
 from lennart_epp.config import BLD, SRC
 
 
-def task_fit_ar_model(
-    script=SRC / "analysis" / "fit_ar_model.py",
+def task_evaluate_ar_models(
+    script=SRC / "analysis" / "evaluate_ar_model.py",
     data=BLD / "data" / "cleaned_apple_data.pkl",
-    produces=BLD / "models" / "ar_model_output.pkl",
-    p=15,
+    produces=BLD / "models" / "ar_model_evaluation.pkl",
+    max_p=15,
+    criterion="aic",
 ):
-    """Fit AR(p) model and save coefficients, integrated coefficients, and metadata."""
+    """Evaluate AR(p) models and save top models and metrics."""
     df = pd.read_pickle(data)
 
-    model_results = fit_ar_model(df, column="close_price", p=p)
+    evaluation_results = evaluate_ar_models(df, max_p=max_p, criterion=criterion)
 
-    coeff_df = pd.DataFrame(
-        {
-            "coefficient": model_results["coefficients"],
-            "lag": [
-                f"Lag {i}" if i > 0 else "Intercept"
-                for i in range(len(model_results["coefficients"]))
-            ],
-        }
-    )
+    top_models_data = evaluation_results.get("top_models", [])
+    metrics_data = evaluation_results.get("model_metrics", [])
+    metadata_data = evaluation_results.get("metadata", {})
 
-    integrated_coeff_df = model_results["integrated_coefficients"]
-
-    metadata_df = pd.DataFrame(
-        {
-            "p_value": [model_results["p_value"]],
-            "differenced": [model_results["differenced"]],
-            "lag_order": [model_results["lag_order"]],
-        }
-    )
+    top_models_df = pd.DataFrame(top_models_data) if top_models_data else pd.DataFrame()
+    metrics_df = pd.DataFrame(metrics_data) if metrics_data else pd.DataFrame()
+    metadata_df = pd.DataFrame([metadata_data]) if metadata_data else pd.DataFrame()
 
     results = {
-        "coefficients": coeff_df,
-        "integrated_coefficients": integrated_coeff_df,
+        "top_models": top_models_df,
+        "model_metrics": metrics_df,
         "metadata": metadata_df,
     }
 
