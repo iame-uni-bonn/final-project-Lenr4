@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from lennart_epp.analysis.fit_ar_model import fit_ar_model
-from lennart_epp.analysis.forecast_ar import forecast_apple_prices
+from lennart_epp.analysis.forecast_ar import forecast_ar_multi_step
 from lennart_epp.config import BLD
 
 # Konstanten für Fehlermeldungen
@@ -15,14 +15,14 @@ multi_forecast_msg = "Forecast enthält mehrdimensionale Werte."
 def task_forecast_ar(
     data=BLD / "data" / "cleaned_apple_data.pkl",
     produces=BLD / "forecasts" / "apple_2023_forecast.pkl",
-    lags=5,
+    lags=30,
 ):
     df = pd.read_pickle(data)
     if "close_price" not in df.columns:
         raise KeyError(missing_close_price_msg)
 
     apple_prices = df["close_price"].asfreq("B", method="ffill")
-    train_data = apple_prices.loc[apple_prices.index < "2023-01-03"]
+    train_data = apple_prices.loc[apple_prices.index < "2022-8-20"]
     if len(train_data) < lags:
         raise ValueError(too_few_train_msg)
 
@@ -31,9 +31,10 @@ def task_forecast_ar(
     integrated_coefficients = ar_result["integrated_coefficients"]
 
     # Forecast mit den integrierten Koeffizienten berechnen
-    forecast = forecast_apple_prices(
-        apple_df=train_data.to_frame(),
+    forecast = forecast_ar_multi_step(
+        df,
         integrated_coefficients=integrated_coefficients,
+        forecast_steps=lags,
     )
 
     # Validierung before dem Speichern

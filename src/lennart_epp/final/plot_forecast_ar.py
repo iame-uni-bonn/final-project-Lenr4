@@ -20,14 +20,14 @@ def plot_forecast_ar(
     if "close_price" not in df.columns:
         raise KeyError(missing_close_msg)
 
-    original = df["close_price"].loc["2022-01-01":"2023-12-31"]
+    original = df["close_price"].loc["2022-07-17":"2022-09-10"]
 
     if forecast.empty:
         raise ValueError(empty_forecast_msg)
     if not isinstance(forecast.index, pd.DatetimeIndex):
         raise TypeError(invalid_index_msg)
 
-    forecast = forecast.loc["2023-01-01":"2023-12-31"]
+    forecast = forecast.loc["2022-07-17":"2022-09-10"]
 
     fig = go.Figure()
 
@@ -46,7 +46,7 @@ def plot_forecast_ar(
             x=forecast.index,
             y=forecast.values,
             mode="lines",
-            name="Forecast (AR-Modell 2023)",
+            name="Forecast (AR-Modell Step=10)",
             line={"color": "orange", "width": 2, "dash": "dash"},
         )
     )
@@ -58,6 +58,22 @@ def plot_forecast_ar(
         legend_title="Legende",
         template="plotly_white",
         autosize=True,
+        yaxis={"range": [143, 180]},
+    )
+
+    fig.add_shape(
+        {
+            "type": "line",
+            "x0": "2022-08-18",
+            "y0": 143,
+            "x1": "2022-08-18",
+            "y1": 180,
+            "line": {
+                "color": "red",
+                "width": 2,
+                "dash": "solid",
+            },
+        }
     )
 
     if export_as_pdf:
