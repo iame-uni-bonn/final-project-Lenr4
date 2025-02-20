@@ -24,6 +24,7 @@ def task_plot_top_ar_models(
         top_models=top_models,
         df=pd.read_pickle(BLD / "data" / "cleaned_apple_data.pkl"),
         plot_path=str(produces),
+        export_as_pdf=True,  # Änderung: jetzt wird auch ein PDF erzeugt
     )
 
     produces.parent.mkdir(parents=True, exist_ok=True)
@@ -39,7 +40,7 @@ def task_plot_forecast_ar(
         data_path=data,
         forecast_path=forecast,
         output_path=str(produces),
-        export_as_pdf=False,
+        export_as_pdf=True,
     )
 
     produces.parent.mkdir(parents=True, exist_ok=True)

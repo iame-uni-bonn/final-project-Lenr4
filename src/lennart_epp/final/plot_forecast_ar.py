@@ -5,6 +5,7 @@ import plotly.io as pio
 missing_close_msg = "Close price column is missing in the original data."
 empty_forecast_msg = "Forecast data is empty."
 invalid_index_msg = "Forecast data does not have a DatetimeIndex."
+msg_pdf = "Fehler beim Erstellen des PDF-Plots"
 
 
 def plot_forecast_ar(
@@ -12,7 +13,7 @@ def plot_forecast_ar(
     forecast_path: str,
     output_path: str,
     *,
-    export_as_pdf: bool = False,
+    export_as_pdf: bool = True,
 ):
     df = pd.read_pickle(data_path)
     forecast = pd.read_pickle(forecast_path)
@@ -76,7 +77,17 @@ def plot_forecast_ar(
         }
     )
 
+    fig.write_html(output_path)
+
     if export_as_pdf:
-        pio.write_image(fig, output_path, format="pdf", width=1200, height=600, scale=2)
-    else:
-        fig.write_html(output_path)
+        from pathlib import Path
+
+        pdf_path = Path(output_path).with_suffix(".pdf")
+        try:
+            pio.write_image(
+                fig, str(pdf_path), format="pdf", width=1200, height=600, scale=2
+            )
+
+        except OSError as e:
+            raise RuntimeError(msg_pdf) from e
+    return output_path
