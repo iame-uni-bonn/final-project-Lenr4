@@ -44,16 +44,24 @@ def test_create_lagged_features():
 
 
 def test_ar_model_output():
-    dates = pd.date_range("2020-01-01", periods=5, freq="D")
+    rng = np.random.default_rng(312)
+
+    dates = pd.date_range("2020-01-01", periods=10, freq="D")
+
     df = pd.DataFrame(
         {
-            "price": [2, 4, 6, 8, 10],
-            "price_lag1": [np.nan, 2, 4, 6, 8],
-            "price_lag2": [np.nan, np.nan, 2, 4, 6],
+            "price": rng.random(10) * 100,
         },
         index=dates,
-    ).dropna()
+    )
+
+    df["price_lag1"] = df["price"].shift(1) + rng.standard_normal(10) * 5
+    df["price_lag2"] = df["price"].shift(2) + rng.standard_normal(10) * 5
+
+    df = df.dropna()
+
     coeffs = _ar_model(df, "price", 2)
+
     assert len(coeffs) == expected_coeff_count
     assert isinstance(coeffs, np.ndarray)
 
