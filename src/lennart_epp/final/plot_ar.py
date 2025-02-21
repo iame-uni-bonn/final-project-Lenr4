@@ -5,21 +5,24 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
 
+from lennart_epp.analysis.evaluate_ar_model import _predict_ar
+
 msg = "Fehler beim Erstellen des PDF-Plots"
 
 
 def _predict_ar_from_coefficients(
     df: pd.DataFrame, integrated_coefficients: pd.DataFrame
 ) -> pd.Series:
-    coeffs = integrated_coefficients["coefficient"].to_numpy()
-    lag_order = len(coeffs) - 1
-    predictions = [np.nan] * lag_order
-    for i in range(lag_order, len(df)):
-        ar_sum = coeffs[0]
-        for lag in range(1, len(coeffs)):
-            ar_sum += coeffs[lag] * df["close_price"].iloc[i - lag]
-        predictions.append(ar_sum)
-    return pd.Series(predictions, index=df.index)
+    model_results = {"integrated_coefficients": integrated_coefficients}
+
+    predictions = _predict_ar(df, model_results)
+
+    lag_order = len(integrated_coefficients) - 1
+    predictions_series = pd.Series(
+        [np.nan] * lag_order + list(predictions), index=df.index
+    )
+
+    return predictions_series
 
 
 def plot_top_ar_models(

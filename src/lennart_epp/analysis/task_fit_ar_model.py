@@ -11,7 +11,7 @@ def task_evaluate_ar_models(
         BLD / "models" / "ar_model_evaluation.pkl",
         BLD / "models" / "top_models.tex",
     ),
-    max_p=15,
+    max_p=12,
     criterion="aic",
 ):
     df = pd.read_pickle(data)
