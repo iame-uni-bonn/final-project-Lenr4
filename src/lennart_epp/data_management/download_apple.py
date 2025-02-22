@@ -6,9 +6,19 @@ from lennart_epp.config import SRC
 
 
 def download_apple_data():
+    """Download and save historical Apple stock data.
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Raises:
+        Exception: If the download fails due to network issues or API errors.
+    """
     raw_data_path = SRC / "data" / "apple_data.csv"
 
-    # ✅ Nur herunterladen, wenn die Datei noch nicht existiert
     if not raw_data_path.exists():
         Path(raw_data_path.parent).mkdir(parents=True, exist_ok=True)
         apple_data = yf.download("AAPL", start="2013-01-01", end="2023-12-31")
