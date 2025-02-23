@@ -5,23 +5,63 @@ from lennart_epp.analysis.fit_ar_model import fit_ar_model
 
 
 def _compute_residuals(df: pd.DataFrame, model_results: dict) -> np.ndarray:
+    """Compute residuals for an autoregressive (AR) model.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing the 'close_price' column.
+        model_results (dict): A dictionary containing the fitted AR parameters.
+
+    Returns:
+        np.ndarray: An array of residuals.
+    """
     fitted_values = _predict_ar(df, model_results)
     return df["close_price"].iloc[len(df) - len(fitted_values) :] - fitted_values
 
 
 def _calculate_aic(residuals: np.ndarray, p: int) -> float:
+    """Calculate the Akaike Information Criterion (AIC) for model evaluation.
+
+    Args:
+        residuals (np.ndarray): An array of residuals from the AR model.
+        p (int): The number of autoregressive parameters in the model.
+
+    Returns:
+        float: The computed AIC value.
+    """
     n = len(residuals)
     rss = np.sum(residuals**2)
     return n * np.log(rss / n) + 2 * (p + 1)
 
 
 def _calculate_bic(residuals: np.ndarray, p: int) -> float:
+    """Calculate the Bayesian Information Criterion (BIC) for model evaluation.
+
+    Args:
+        residuals (np.ndarray): An array of residuals from the AR model.
+        p (int): The number of autoregressive parameters in the model.
+
+    Returns:
+        float: The computed BIC value.
+    """
     n = len(residuals)
     rss = np.sum(residuals**2)
     return n * np.log(rss / n) + np.log(n) * (p + 1)
 
 
 def _predict_ar(df: pd.DataFrame, model_results: dict) -> np.ndarray:
+    """Generate 1 step predictions (fitted values) using an autoregressive (AR) model.
+
+    The function applies AR model coefficients to past values of 'close_price'
+    to make predictions.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing the 'close_price' column.
+        model_results (dict): A dictionary containing model coefficients under
+                              'integrated_coefficients'.
+
+    Returns:
+        np.ndarray: An array of predicted values based on the AR model.
+    """
     integrated_coeff = model_results["integrated_coefficients"][
         "coefficient"
     ].to_numpy()
@@ -39,6 +79,25 @@ def _predict_ar(df: pd.DataFrame, model_results: dict) -> np.ndarray:
 def evaluate_ar_models(
     df: pd.DataFrame, max_p: int = 15, criterion: str = "aic"
 ) -> dict:
+    """Evaluate multiple Autoregressive (AR) models and select the best ones.
+
+    This function fits AR models for different lag values (p) up to `max_p`,
+    computes the AIC and BIC scores for each model, and returns the top-performing
+    models based on the selected criterion.
+
+    Args:
+        df (pd.DataFrame): The input DataFrame containing the 'close_price' column.
+        max_p (int, optional): The maximum number of autoregressive lags to test.
+                               Defaults to 15.
+        criterion (str, optional): The selection criterion for ranking models.
+                                   Can be "aic" or "bic". Defaults to "aic".
+
+    Returns:
+        dict: A dictionary containing:
+            - **top_models** (list[dict]): The top 3 sorted by the given criterion.
+            - **model_metrics** (list[dict]): A list of evaluated models with metrics.
+            - **metadata** (dict): Information about evaluation, `max_p`, `criterion`.
+    """
     results = []
 
     for p in range(1, max_p + 1):
