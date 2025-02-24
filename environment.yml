@@ -25,6 +25,7 @@ dependencies:
   - pandas >=2.2
   - plotly >=5.2.0,<6
   - yfinance  # added yfinance
+  - scikit-learn >=1.0
 
   # R template project dependencies
   - pytask-r >=0.4.1
@@ -35,4 +36,4 @@ dependencies:
   - r-forcats
 
   # Install project
-  - pip: [-e ., pdbp, kaleido, arch >=5.1]
+  - pip: [-e ., pdbp, kaleido, arch >=5.1, nolds]
