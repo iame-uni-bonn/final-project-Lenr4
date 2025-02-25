@@ -19,15 +19,44 @@ def test_integrated_coefficients():
     return pd.DataFrame({"coefficient": coeffs})
 
 
-def test_forecast_ar_multi_step(test_dataframe, test_integrated_coefficients):
+def test_forecast_ar_multi_step_output_type(
+    test_dataframe, test_integrated_coefficients
+):
+    """Test that forecast_ar_multi_step returns a pandas Series."""
     forecast_steps = 10
     forecasts = forecast_ar_multi_step(
         test_dataframe, test_integrated_coefficients, forecast_steps
     )
 
     assert isinstance(forecasts, pd.Series)
+
+
+def test_forecast_ar_multi_step_length(test_dataframe, test_integrated_coefficients):
+    """Test that the forecast length matches the requested number of steps."""
+    forecast_steps = 10
+    forecasts = forecast_ar_multi_step(
+        test_dataframe, test_integrated_coefficients, forecast_steps
+    )
+
     assert len(forecasts) == forecast_steps
+
+
+def test_forecast_ar_multi_step_no_nans(test_dataframe, test_integrated_coefficients):
+    """Test that the forecast does not contain NaN values."""
+    forecast_steps = 10
+    forecasts = forecast_ar_multi_step(
+        test_dataframe, test_integrated_coefficients, forecast_steps
+    )
+
     assert not forecasts.isna().any()
+
+
+def test_forecast_ar_multi_step_index(test_dataframe, test_integrated_coefficients):
+    """Test that the forecast index matches the expected date range."""
+    forecast_steps = 10
+    forecasts = forecast_ar_multi_step(
+        test_dataframe, test_integrated_coefficients, forecast_steps
+    )
 
     expected_index_start = test_dataframe.index[-344]
     expected_index = pd.date_range(

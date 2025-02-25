@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def _select_and_rename_column(df: pd.DataFrame) -> pd.DataFrame:
+def _rename_column(df: pd.DataFrame) -> pd.DataFrame:
     """Select the 'Close' column and rename it to 'close_price'.
 
     Args:
@@ -92,7 +92,7 @@ def clean_apple_data(df: pd.DataFrame) -> pd.DataFrame:
     _validate_dataframe(df)
 
     df = _convert_to_datetime(df)
-    df = _select_and_rename_column(df)
+    df = _rename_column(df)
     df = _handle_missing_values(df)
     df = _remove_duplicates(df)
     df = _convert_to_numeric(df)
