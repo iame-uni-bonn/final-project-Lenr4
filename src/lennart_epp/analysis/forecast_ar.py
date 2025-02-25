@@ -4,6 +4,20 @@ import pandas as pd
 def forecast_ar_multi_step(
     df: pd.DataFrame, integrated_coefficients: pd.DataFrame, forecast_steps: int
 ) -> pd.Series:
+    """Generate multi-step forecasts using an AR model.
+
+    This function uses the integrated AR model coefficients to iteratively
+    forecast future values.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the time series data.
+        integrated_coefficients (pd.DataFrame): DataFrame of integrated AR coefficients.
+        forecast_steps (int): Number of future steps to forecast.
+
+    Returns:
+        pd.Series: A time series of forecasted values indexed dates.
+
+    """
     coeffs = integrated_coefficients["coefficient"].to_numpy()
     lag_order = len(coeffs) - 1
 

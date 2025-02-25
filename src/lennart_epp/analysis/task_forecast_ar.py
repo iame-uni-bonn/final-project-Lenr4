@@ -5,18 +5,33 @@ from lennart_epp.analysis.fit_ar_model import fit_ar_model
 from lennart_epp.analysis.forecast_ar import forecast_ar_multi_step
 from lennart_epp.config import BLD
 
-# Konstanten für Fehlermeldungen
-missing_close_price_msg = "Spalte 'close_price' fehlt!"
-too_few_train_msg = "Zu wenige Trainingsdaten."
-type_forecast_msg = "Forecast muss 'pd.Series' sein."
-multi_forecast_msg = "Forecast enthält mehrdimensionale Werte."
+missing_close_price_msg = "Column 'close_price' missing!"
+too_few_train_msg = "Not enough training data."
+type_forecast_msg = "Forecast has to be 'pd.Series'."
+multi_forecast_msg = "Forecast contains multi-dimensional values."
 
 
 def task_forecast_ar(
     data=BLD / "data" / "cleaned_apple_data.pkl",
-    produces=BLD / "forecasts" / "apple_2023_forecast.pkl",
-    lags=30,
+    produces=BLD / "forecasts" / "multistep_forecast.pkl",
+    lags=50,
 ):
+    """Generate multi-step forecasts using an AR model.
+
+    Args:
+        data (Path): Path to the cleaned Apple stock data.
+        produces (Path): Path to store the multi-step forecast as a pickle file.
+        lags (int, optional): Number of lags to use for the AR model.
+
+    Raises:
+        KeyError: If the required "close_price" column is missing.
+        ValueError: If there are insufficient training data.
+        TypeError: If the forecast is not a Pandas Series.
+        ValueError: If the forecast contains multi-dimensional values.
+
+    Returns:
+        None: Saves the forecast to specified output files.
+    """
     df = pd.read_pickle(data)
     if "close_price" not in df.columns:
         raise KeyError(missing_close_price_msg)
@@ -26,18 +41,15 @@ def task_forecast_ar(
     if len(train_data) < lags:
         raise ValueError(too_few_train_msg)
 
-    # AR-Modell fitten, um die integrierten Koeffizienten zu erhalten
     ar_result = fit_ar_model(train_data.to_frame(), column="close_price", p=lags)
     integrated_coefficients = ar_result["integrated_coefficients"]
 
-    # Forecast mit den integrierten Koeffizienten berechnen
     forecast = forecast_ar_multi_step(
         df,
         integrated_coefficients=integrated_coefficients,
         forecast_steps=lags,
     )
 
-    # Validierung before dem Speichern
     if not isinstance(forecast, pd.Series):
         raise TypeError(type_forecast_msg)
     if forecast.apply(lambda x: isinstance(x, list | np.ndarray)).any():

@@ -14,12 +14,29 @@ def task_evaluate_ar_models(
     max_p=12,
     criterion="aic",
 ):
+    """Evaluate multiple AR models and store the results.
+
+    This function loads cleaned stock price data, fits AR models up to the specified
+    maximum lag order, and evaluates them using the given selection criterion.
+
+    Args:
+        script (Path): Path to the script that evaluates AR models.
+        data (Path): Path to the cleaned Apple stock data.
+        produces (tuple[Path, Path]): Paths to the output files:
+            - Pickle file containing evaluation results.
+            - LaTeX file with the top AR models.
+        max_p (int, optional): Maximum order of the AR model to evaluate.
+        criterion (str, optional): Model selection criterion ("aic" or "bic").
+
+    Returns:
+        None: Saves results to specified output files and asserts their existence.
+    """
     df = pd.read_pickle(data)
     evaluation_results = evaluate_ar_models(df, max_p=max_p, criterion=criterion)
 
     produces[0].parent.mkdir(parents=True, exist_ok=True)
     pd.to_pickle(evaluation_results, produces[0])
-    assert produces[0].exists(), f"❌ Failed to produce {produces[0]}"
+    assert produces[0].exists(), f" Failed to produce {produces[0]}"
 
     top_models_df = pd.DataFrame(evaluation_results.get("top_models", []))
 
@@ -53,4 +70,4 @@ def task_evaluate_ar_models(
             f.write("\\end{tabular}\n")
             f.write("\\end{table}\n")
 
-        assert produces[1].exists(), f"❌ Failed to produce {produces[1]}"
+        assert produces[1].exists(), f" Failed to produce {produces[1]}"
