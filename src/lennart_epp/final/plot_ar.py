@@ -7,12 +7,21 @@ import plotly.io as pio
 
 from lennart_epp.analysis.evaluate_ar_model import _predict_ar
 
-msg = "Fehler beim Erstellen des PDF-Plots"
+msg = "Pdf could not be created."
 
 
 def _predict_ar_from_coefficients(
     df: pd.DataFrame, integrated_coefficients: pd.DataFrame
 ) -> pd.Series:
+    """Generate in-sample predictions using AR model coefficients.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the time series data.
+        integrated_coefficients (pd.DataFrame): DataFrame of integrated AR coefficients.
+
+    Returns:
+        pd.Series: A series of in-sample predictions, aligned with the original index.
+    """
     model_results = {"integrated_coefficients": integrated_coefficients}
 
     predictions = _predict_ar(df, model_results)
@@ -32,6 +41,18 @@ def plot_top_ar_models(
     *,
     export_as_pdf: bool = False,
 ):
+    """Plot and save the top AR models' approximations of the Apple stock price.
+
+    Args:
+        top_models (pd.DataFrame): DataFrame containing the top AR(p) models,
+                                   including their integrated coefficients.
+        df (pd.DataFrame): The DataFrame containing the stock price time series.
+        plot_path (str): The path to save the generated HTML plot.
+        export_as_pdf (bool, optional): If True, also exports the plots as a PDF.
+
+    Returns:
+        str: The path where the plot is saved.
+    """
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
@@ -87,8 +108,6 @@ def plot_top_ar_models(
         height=300,
     )
     combined_html = (
-        "<h1>Top 3 AR(p) Models vs. Original Data (Zoom on Last 100 Days, "
-        "Y-axis 140-200)</h1>\n"
         f"{fig.to_html(full_html=False, include_plotlyjs='cdn')}\n"
         "<h2>Residuals of AR(p) Models</h2>\n"
         f"{residual_fig.to_html(full_html=False, include_plotlyjs='cdn')}"

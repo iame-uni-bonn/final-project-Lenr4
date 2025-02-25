@@ -14,7 +14,7 @@ multi_forecast_msg = "Forecast contains multi-dimensional values."
 def task_forecast_ar(
     data=BLD / "data" / "cleaned_apple_data.pkl",
     produces=BLD / "forecasts" / "multistep_forecast.pkl",
-    lags=50,
+    lags=30,
 ):
     """Generate multi-step forecasts using an AR model.
 

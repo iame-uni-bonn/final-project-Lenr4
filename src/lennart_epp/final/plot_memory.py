@@ -24,7 +24,10 @@ def plot_acf(acf_data: dict, save_path_html: str, save_path_pdf: str, n_obs: int
 
     fig.add_trace(
         go.Bar(
-            x=lags, y=acf_values, marker={"color": "rgba(0, 0, 255, 0.8)"}, name="ACF"
+            x=lags,
+            y=acf_values,
+            marker={"color": "rgba(0, 0, 255, 0.8)"},
+            name="ACF Value",
         )
     )
 
@@ -49,7 +52,7 @@ def plot_acf(acf_data: dict, save_path_html: str, save_path_pdf: str, n_obs: int
     )
 
     fig.update_layout(
-        title="Autocorrelation Function (ACF) with Confidence Bands",
+        title="ACF of differenced Close Price with Confidence Bands",
         xaxis_title="Lag",
         yaxis_title="ACF Value",
         template="plotly_white",

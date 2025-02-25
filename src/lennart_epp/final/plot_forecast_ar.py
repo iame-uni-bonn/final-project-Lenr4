@@ -5,7 +5,7 @@ import plotly.io as pio
 missing_close_msg = "Close price column is missing in the original data."
 empty_forecast_msg = "Forecast data is empty."
 invalid_index_msg = "Forecast data does not have a DatetimeIndex."
-msg_pdf = "Fehler beim Erstellen des PDF-Plots"
+msg_pdf = "Pdf_plot could not be created."
 
 
 def plot_forecast_ar(
@@ -15,6 +15,23 @@ def plot_forecast_ar(
     *,
     export_as_pdf: bool = True,
 ):
+    """Plot and save the original Apple stock price alongside the AR model forecast.
+
+    Args:
+        data_path (str): Path to the cleaned stock price data.
+        forecast_path (str): Path to the AR model forecast data.
+        output_path (str): Path to save the generated plot.
+        export_as_pdf (bool, optional): If True, also exports the plot as a PDF.
+
+    Returns:
+        str: The path where the plot is saved.
+
+    Raises:
+        KeyError: If the 'close_price' column is missing in the input data.
+        ValueError: If the forecast data is empty.
+        TypeError: If the forecast index is not a DatetimeIndex.
+        RuntimeError: If exporting to PDF fails.
+    """
     df = pd.read_pickle(data_path)
     forecast = pd.read_pickle(forecast_path)
 
@@ -53,10 +70,10 @@ def plot_forecast_ar(
     )
 
     fig.update_layout(
-        title="Apple Aktienkurs: Original vs. AR-Forecast (2023)",
+        title="Apple Stock Price: Original vs. AR-Multi-Step-Forecast",
         xaxis_title="Datum",
         yaxis_title="Kurs (USD)",
-        legend_title="Legende",
+        legend_title="Legend",
         template="plotly_white",
         autosize=True,
         yaxis={"range": [143, 180]},
