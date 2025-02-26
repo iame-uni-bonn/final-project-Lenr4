@@ -1,6 +1,6 @@
 ---
 name: lennart_epp
-channels: [conda-forge, r, nodefaults]
+channels: [conda-forge, nodefaults]
 dependencies:
   - python ==3.12
   - pip >=21.1
@@ -26,14 +26,6 @@ dependencies:
   - plotly >=5.2.0,<6
   - yfinance  # added yfinance
   - scikit-learn >=1.0
-
-  # R template project dependencies
-  - pytask-r >=0.4.1
-  - pyreadr
-  - r-plyr
-  - r-precommit
-  - r-yaml
-  - r-forcats
 
   # Install project
   - pip: [-e ., pdbp, kaleido, arch >=5.1, nolds]

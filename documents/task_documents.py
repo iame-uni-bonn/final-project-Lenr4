@@ -1,4 +1,4 @@
-"""Tasks for compiling the paper and presentation(s)."""
+"""Tasks for compiling the paper."""
 
 import shutil
 
@@ -7,7 +7,7 @@ from pytask_latex import compilation_steps as cs
 
 from lennart_epp.config import BLD, DOCUMENTS, ROOT
 
-documents = ["paper", "presentation"]
+documents = ["paper"]
 
 for document in documents:
 

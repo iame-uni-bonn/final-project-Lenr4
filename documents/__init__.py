@@ -1,1 +1,1 @@
-"""Code for the paper and presentation(s)."""
+"""Code for the paper."""
