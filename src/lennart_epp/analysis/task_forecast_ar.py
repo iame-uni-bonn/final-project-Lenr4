@@ -57,6 +57,3 @@ def task_forecast_ar(
 
     produces.parent.mkdir(parents=True, exist_ok=True)
     pd.to_pickle(forecast, produces)
-
-    html_output = produces.with_suffix(".html")
-    forecast.to_frame(name="Forecasted Close Price").to_html(html_output, index=True)
