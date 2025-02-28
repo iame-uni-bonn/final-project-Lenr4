@@ -53,7 +53,7 @@ def task_evaluate_ar_models(
         with produces[1].open("w", encoding="utf-8") as f:
             f.write("\\begin{table}[H]\n")
             f.write("\\centering\n")
-            f.write("\\caption{Top AR Models}\n")
+            f.write("\\caption{Top AR Models Metrics}\n")
             f.write("\\label{tab:top_models}\n")
             f.write("\\begin{tabular}{|c|c|c|c|c|}\n")
             f.write("\\hline\n")

@@ -1,7 +1,177 @@
 \documentclass{article}
 
+
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+
+
+
+
+
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+
+
+\captionsetup{font=small, labelfont=bf}
+
+
+\justifying
+\setlength{\parindent}{15pt}
+\raggedbottom
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
 \begin{document}
 
-Hello, World!
+\title{Apple Stock AR-Process Analysis and Multistep Forecasting}
+\author{Lennart Epp}
+\date{\today}
+
+\maketitle
+
+
+\pagenumbering{gobble}
+
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\newpage
+\pagenumbering{arabic}
+
+\section{Introduction}
+
+In this project, Apple stock data is analyzed using time series econometrics methods. This
+paper is structured as follows: first, I present the Top 3 best-fitting AR(p) models for approximating
+i.e for one step forecasting of the Apple stock data. So for this forecast/approximation, only values
+of the original data namley the close price of the apple stock are used as in input for the forecast.\\
+Then, I proceed with an analysis to what extent it is possible to fit an AR(p) process on Apple.
+For this I checked if the differenced Apple data is stationary and after that I concern whether the
+time series has long or short memory.\\
+Lastly, I will present a multi-step forecast, where each forecasted value is used as input
+for the next prediction. I will analyze why this approach fails to capture Apple stock dynamics
+beyond a one-step forecast and discuss the overall feasibility of fitting an AR model to Apple stock data.
+
+\section{Top AR(p) Approximations}
+
+The following plots shows the top 3 AR model fits in the sense of the Akaike Information
+Criterion. It also shows the residual plot of the top 3 AR models. The figure shows that
+one-step forecasts closely follow the original data. However, the variance of the residuals
+increases over time, suggesting that the model struggles to maintainforecast accuracy over
+longer periods.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.8, width=\textwidth, trim=10 10 10 10, clip]
+    {../bld/plots/top_ar_models_plot.pdf}
+    \caption{Comparison of the top-performing AR models.}
+    \label{fig:top_ar_models}
+\end{figure}
+
+\noindent In the following table, you see the metrics of the best AR(P) processes in terms of their AIC.
+First, notice that the AR(p) was fitted on the differenced close price since the P-Value of
+the Augmented Dickey-Fuller test suggested differencing, indicating that the original close
+price is likely not stationary.\\
+Therefore, the AR coefficients had to be integrated to approximate the original time series,
+which could lead to accumulated errors. So given the AIC as you can see in the table, the AR(1) process fitted
+Apple best. In total I tested p values up to 12.
+
+\input{../bld/models/top_models.tex}
+
+\section{Memory Analysis}
+
+In this section, I check to what extent it is possible to fit an AR model on the differenced data.
+Therefore, I first used the ADF test to check if the differenced close price is stationary.
+The results are shown in the following table, indicating that the differenced series is likely
+stationary. This is a necessary prerequest for fitting AR models.
+
+\input{../bld/memory/diff_close_stat_test.tex}
+
+
+\noindent After confirming stationarity, the next critical question is whether the differenced time series
+exhibits short or long memory. Therefore I computed the Autocorrelation Function of the time series. As
+you can see in the following plot the ACF decreases over time but still has a few outlieres which
+indicates that the time series has the characteristics of a process with a short memory,
+but with potential components with a long memory.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.2, width=\textwidth, trim=10 10 10 10, clip]
+    {../bld/plots/acf_plot.pdf}
+    \caption{Autocorrelation Function (ACF) of the differenced time series with 95\% confidence
+    bands.}
+    \label{fig:acf_plot}
+\end{figure}
+
+
+\noindent Since the differenced close price is likely stationary, but the ACF indictaes some long run effects
+I also cumpted the hurst coefficient which has an value of approximately  .052 which indicates
+that the time series shows characteristics of a process with almost random behavior, as the Hurst coefficient
+close to 0.5 indicates the absence of strong long-term dependencies. However, since the ACF indicates some
+long-term effects, this result could indicate a mixture of short-term autocorrelations with occasional
+persistence.
+
+
+\input{../bld/memory/hurst_exponent.tex}
+
+\newpage
+
+\section{Multistep Forecast}
+
+Although the differenced close price was found to be stationary, the presence of a Hurst
+coefficient of 0.52 and some significant autocorrelation function (ACF) values suggest that
+the series retains some degree of long memory.
+
+\noindent AR models are designed to capture short-term dependencies and assume that the impact of past
+values decays rapidly. However, in a long-memory process, dependencies persist for a longer
+time, meaning that an AR(p) model may fail to account for the full structure of the series
+beyond a few steps ahead.
+
+\noindent In a one-step-ahead forecast, the AR model predicts the next value based solely on observed
+historical data. In a multi-step forecast, each predicted value is used as input for the next
+prediction. This recursive approach leads to error accumulation.
+
+\noindent The following figure illustrates that the AR model fails to capture the long-term structure
+of Apple stock price movements when applied to multi-step forecasting. This is due to error accumulation
+and the model's inability to account for evolving market dynamics.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.8, width=\textwidth, trim=10 10 10 10, clip]
+    {../bld/plots/multistep_forecast.pdf}
+    \caption{Multi-step forecast for Apple stock price.}
+    \label{fig:apple_forecast}
+\end{figure}
+
+\section{Conclusion}
+
+To conclude my analysis i went through the following steps:\\
+First, the stationarity analysis, conducted using the Augmented Dickey-Fuller (ADF) test,
+indicated that the original close price series was non-stationary, requiring differencing to
+achieve stationarity.\\
+Second, the evaluation of different AR(p) models based on the Akaike Information Criterion
+(AIC) revealed that an AR(1) model provided the best fit among the examined options.\\
+Third, the study investigated the memory characteristics of the time series by computing the
+Hurst exponent and analyzing the autocorrelation function (ACF). The results suggested that
+the differenced time series exhibited short-memory behavior.\\
+Finally, the limitations of AR models for multi-step forecasting were assessed. While the AR(1)
+model performs well for short-term forecasts, its accuracy deteriorates over multiple steps
+due to error propagation and the inability to capture long-term dependencies.
 
 \end{document}

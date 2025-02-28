@@ -180,7 +180,7 @@ def write_hurst_result_to_tex(results: dict, file_path: Path):
     latex_content = f"""
     \\begin{{table}}[H]
         \\centering
-        \\caption{{Hurst Exponent Analysis}}
+        \\caption{{Hurst Exponent Statistics}}
         \\label{{tab:hurst_exponent}}
         \\begin{{tabular}}{{l c}}
             \\toprule
