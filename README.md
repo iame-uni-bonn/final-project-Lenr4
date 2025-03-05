@@ -1,4 +1,4 @@
-# Apple Stock AR-Process Analysis & Multistep Forecasting
+# Autoregressive Model Analysis and Multistep Forecast of Apple Stock Data
 
 ## Table of Contents
 
@@ -11,26 +11,27 @@ ______________________________________________________________________
 
 ## Overview
 
-In this project, I analyzed apple stock data using time series econometrics methods. The
-final result of my project is a latex file that roughly describes the analysis steps and
-the charts and to what extent it is possible to use/interpret my results.
+In this project, Apple stock data was analyzed using time series econometrics methods.
+The final output of this project is the LaTeX file **paper.pdf** that roughly describes
+the analysis steps as well as the figures/tables and deals with the question to what
+extent it is possible to interpret the results.
 
 In this project, I:
 
 - fit several AR processes to Apple's historical stock data.
-- compare model performance to identify the best fitting AR process.
-- evaluate the ability of the best model to perform multistep forecasts.
-- investigate the extent to which it is possible to use the AR process for analysis.
-- provide analysis and plots to visualize both the model fit and forecasting
+- compared model performance to identify the best fitting AR process.
+- evaluated the ability of the best model to perform multistep forecasts.
+- investigated the extent to which it is possible to use the AR process for analysis.
+- provided analysis and plots to visualize both the model fit and forecasting
   performance.
 
 ______________________________________________________________________
 
 ## System Prerequisites
 
-To make sure that the project works on your machine you need to have installed *Python*,
-*a modern LaTeX distribution*, *Git*, and if applicable a *text editor*. For a more
-detailed explanation see the
+To make sure that the project works on your device it is necessary to have installed
+*Python*, *a modern LaTeX distribution*, *Git*, and if applicable a *text editor*. For a
+more detailed explanation see the
 [documentation](https://econ-project-templates.readthedocs.io/en/stable/getting_started/index.html).
 
 ______________________________________________________________________
@@ -43,7 +44,7 @@ First one needs to clone the repository:
 git clone https://github.com/iame-uni-bonn/final-project-Lenr4.git
 ```
 
-Next navigate to the project root and create and activate the environment:
+Next, navigate to the project root and create and activate the environment:
 
 ```bash
 mamba env create lennart_epp
@@ -56,7 +57,7 @@ After the environment is activated, one can run the project by:
 pytask
 ```
 
-> 🛑 **Caution**: If you had trouble with kaleido on windows you need to use this
+> 🛑 **Caution**: If there were any trouble with kaleido on windows you need to use this
 > [workaround](https://effective-programming-practices.vercel.app/plotting/why_plotly_prerequisites/objectives_materials.html#windows-workaround):
 >
 > ```bash
@@ -71,14 +72,14 @@ The Project is structured into three different parts.
 
 - **bld**: The Build directory cointaing all output files.
 
-  - **plots**: top 3 AR models for fitting(1 step forecast), multistep forecast, ACF all
-    as interactive html and pdf
-  - **forecasts**: 10 step forecast using AR(1) as pkl file
-  - **data**: cleaned apple data as pkl file
-  - **memory**: pkl file of ACF, and tex files of *Hurst* and *ADF* statistics
-  - **models** pkl file of all AR models and tex file with top model statistics
+  - **plots**: Top 3 AR models for fitting (1 step forecast), ACF, Multistep forecast;
+    all as interactive .html and .pdf files.
+  - **forecasts**: Multistep forecast using AR(1) as .pkl file.
+  - **data**: Cleaned Apple data as .pkl file.
+  - **memory**: .pkl file of ACF and .tex files of *Hurst* and *ADF* statistics.
+  - **models**: .pkl file of all AR models and .tex file with top model statistics.
 
-- **src**: The source directory containing all python files needed for the analysis.
+- **src**: The Source directory containing all python files needed for the analysis.
 
   - **data**: CSV file containing the raw data for reproducibilty.
   - **data_management**: Python files for cleaning and downloading the data from
@@ -86,7 +87,7 @@ The Project is structured into three different parts.
   - **analysis**: Python files which analyse the data.
   - **final**: Python files which plot the results.
 
-- **tests**: The test directory containing all python files which are used for testing.
+- **tests**: The Test directory containing all python files which are used for testing.
 
   - **data_management**: Python files for testing the data management steps.
   - **analysis**: Python files for testing the analysis steps.
